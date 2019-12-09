@@ -5,7 +5,7 @@
 int main(int argc, char* argv[])
 {
     int i;
-    snakeBody body;
+    body body;
     position testCoord = {5, 5};
     initSnakeBody(&body);
     if(firstEnqueue(&body, testCoord) == ALLOC_ERROR)

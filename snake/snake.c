@@ -1,6 +1,6 @@
 #include "include/snake.h"
 
-void initSnakeBody(snakeBody* body)
+void initSnakeBody(body* body)
 {
     body->m_cursor = NULL;
     body->m_head = NULL;
@@ -8,7 +8,7 @@ void initSnakeBody(snakeBody* body)
     body->m_size = 0;
 }
 
-int empty(snakeBody* body)
+int empty(body* body)
 {
     if (body->m_size == 0)
     {
@@ -20,11 +20,11 @@ int empty(snakeBody* body)
     }
 }
 
-int firstEnqueue(snakeBody* body, position position)
+int firstEnqueue(body* body, position position)
 {
     if(empty(body))
     {
-        body->m_head = (snakeElement*) malloc(sizeof(snakeElement)); /* on alloue un nouvel élement pointé par la tête */
+        body->m_head = (element*) malloc(sizeof(element)); /* on alloue un nouvel élement pointé par la tête */
         if(body->m_head == NULL)
         {
             return ALLOC_ERROR;
@@ -35,13 +35,14 @@ int firstEnqueue(snakeBody* body, position position)
         setCoord(body->m_head, position);
         body->m_head->m_next = NULL; /* on initialise le pointeur de l'élement à NULL */ 
     }
+    return SUCCESS;
 }
 
-int enqueue(snakeBody* body, position position)
+int enqueue(body* body, position position)
 {
     if (!empty(body))
     {
-        body->m_head->m_next = (snakeElement*) malloc(sizeof(snakeElement)); /* on alloue un nouvel élement pointé par le premier élement */
+        body->m_head->m_next = (element*) malloc(sizeof(element)); /* on alloue un nouvel élement pointé par le premier élement */
         if(body->m_head->m_next == NULL)
         {
             return ALLOC_ERROR;
@@ -52,9 +53,10 @@ int enqueue(snakeBody* body, position position)
         setCoord(body->m_head, position);
         body->m_head->m_next = NULL; /* on initialise le pointeur de l'élement à NULL */
     }
+    return SUCCESS;
 }
 
-void dequeue(snakeBody* body)
+void dequeue(body* body)
 {
     if (!empty(body))
     {
@@ -66,12 +68,12 @@ void dequeue(snakeBody* body)
     }
 }
 
-void initCursor(snakeBody* body)
+void initCursor(body* body)
 {
     body->m_cursor = body->m_queue; /* on pointe le curseur sur le dernier élement */
 }
 
-void cursorNext(snakeBody* body)
+void cursorNext(body* body)
 {
     if(body->m_cursor != NULL) 
     {
@@ -82,7 +84,7 @@ void cursorNext(snakeBody* body)
     }
 }
 
-position getHead(snakeBody* body)
+position getHead(body* body)
 {
     if (body->m_head != NULL)
     {
@@ -90,19 +92,19 @@ position getHead(snakeBody* body)
     }
 }
 
-position getCursor(snakeBody* body)
+position getCursor(body* body)
 {
     if(body->m_cursor != NULL)
     {
         return body->m_cursor->m_position;
     }
 }
-void setCoord(snakeElement* Element, position position)
+void setCoord(element* Element, position position)
 {
     Element->m_position = position;
 }
 
-void queueToHead(snakeBody* body, position position)
+void queueToHead(body* body, position position)
 {
     if (!empty(body))
     {
@@ -116,7 +118,7 @@ void queueToHead(snakeBody* body, position position)
     }
 }
 
-void setHead(snakeBody* body, position position)
+void setHead(body* body, position position)
 {
     if (body->m_head != NULL)
     {
