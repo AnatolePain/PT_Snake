@@ -5,15 +5,19 @@
 #define CYCLE 1000000L
 
 
-void initSegment(segment* segment, int largeur){
+void initSegment(segment* segment, int largeur,rect* rectVertClair){
 
-    segment->largeur = largeur;
-	segment->hauteur = (int)(0.7*largeur);
+	segment->largeur = largeur;
+	segment->a = (int)(0.02*segment->largeur);	/*a = 2% de la largeur*/
+	rectVertClair->l = segment->largeur - 2*segment->a;
+	segment->b = (int)rectVertClair->l/60;
+	rectVertClair->h = 40*segment->b;
+	segment->hauteur = segment->a + rectVertClair->h + 5*segment->a;
 
-    segment->a = (int)(0.02*segment->largeur);	/*a = 2% de la largeur*/
-	segment->b = (int)(0.15*segment->hauteur);	/*b =15% de la hauteur*/
-	segment->c = (int)(0.15*segment->largeur);	/*c =15% de la largeur*/
+	rectVertClair->x = segment->a;
+	rectVertClair->y = segment->a;	
 }
+
 
 void initColor(color* color){
 
@@ -25,26 +29,17 @@ void initColor(color* color){
 
 }
 
-void initRectVertClair(rect* rect, segment* segment){
-
-    rect->x = segment->a;
-	rect-> y = segment->a;
-	rect-> l = segment->largeur - 2*segment->a;
-	rect-> h = segment->hauteur - segment->b;
-
-}
-
 void initTimer(rect* rectNoirTimer, segment* segment,text* positionTimer, infoTimer* infoTimer,unsigned long microsecondes){
 
 	/*---RECT NOIR DE CAHCHE---*/
     rectNoirTimer->x = segment->a;
-	rectNoirTimer->y = segment->hauteur -((segment->b)-(segment->a));
-	rectNoirTimer->l = segment->c;
-	rectNoirTimer->h = segment->b;
+	rectNoirTimer->y = segment->hauteur -5*segment->a;
+	rectNoirTimer->l = 7*segment->b;
+	rectNoirTimer->h = 5*segment->a;
 
 	/*---AFFICHAGE TIMER---*/
-	positionTimer-> x = segment->a;
-	positionTimer-> y = segment->hauteur - (int)(segment->b/3);
+	positionTimer-> x = 2*segment->a;
+	positionTimer-> y = segment->hauteur - 2*segment->a;
 	sprintf(positionTimer->string, "%02d:%02d",0,0);
 
 	/*---INFO COMPLEMENTAIRE---*/

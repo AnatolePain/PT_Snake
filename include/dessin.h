@@ -9,7 +9,6 @@ typedef struct segment{
     int hauteur;
     int a;
     int b;
-    int c;
     
 }segment;
 
@@ -50,11 +49,9 @@ typedef struct infoTimer{
 }infoTimer;
 
 
-void initSegment(segment* segment, int largeur);
+void initSegment(segment* segment, int largeur, rect* rectVertClair);
 
 void initColor(color* color);
-
-void initRectVertClair(rect* rect, segment* segment);
 
 void initTimer(rect* rectNoirTimer, segment* segment,text* positionTimer, infoTimer* infoTimer,unsigned long microsecondes);
 
