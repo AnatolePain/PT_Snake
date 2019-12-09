@@ -1,6 +1,5 @@
 #ifndef DESSIN_H
 #define DESSIN_H
-
 #include<stdlib.h>
 #include <stdio.h>
 
@@ -14,7 +13,6 @@ typedef struct segment{
     
 }segment;
 
-
 typedef struct color{
 
  int noir;
@@ -24,7 +22,6 @@ typedef struct color{
  int blanc;
 
 }color;
-
 
 typedef struct rect{
 
@@ -39,9 +36,18 @@ typedef struct text{
 
     int x;
     int y;
-
+    char string[30];
+    int taille;
 
 }text;
+
+typedef struct infoTimer{
+
+ int compteurSec;
+ unsigned long microsecondes;
+ unsigned long compteurMicrosec;
+
+}infoTimer;
 
 
 void initSegment(segment* segment, int largeur);
@@ -50,11 +56,11 @@ void initColor(color* color);
 
 void initRectVertClair(rect* rect, segment* segment);
 
-void initPositionTimer(rect* rectNoirTimer, segment* segment,text* positionTimer);
+void initTimer(rect* rectNoirTimer, segment* segment,text* positionTimer, infoTimer* infoTimer,unsigned long microsecondes);
 
-void initfenetre(color* color, rect* rectVertClair, segment* segment,infoTimer* infoTimer,text* positionTimer);
+void initfenetre(color* color, rect* rectVertClair, segment* segment,text* positionTimer);
 
-void afficherTimer(color* color,text positionTimer,infoTimer* infoTimer, rect* rectNoirTimer,unsigned long microsecondes, int i);
+void timer(unsigned long microsecondes, infoTimer* infoTimer,text* positionTimer,color* color,rect* rectNoirTimer);
 
 
 #endif

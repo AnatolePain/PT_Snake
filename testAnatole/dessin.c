@@ -1,10 +1,8 @@
 #include<stdlib.h>
 #include <stdio.h>
-
 #include "include/dessin.h"
-#include "include/timer.h"
 #include<graph.h>
-
+#define CYCLE 1000000L
 
 
 void initSegment(segment* segment, int largeur){
@@ -16,7 +14,6 @@ void initSegment(segment* segment, int largeur){
 	segment->b = (int)(0.15*segment->hauteur);	/*b =15% de la hauteur*/
 	segment->c = (int)(0.15*segment->largeur);	/*c =15% de la largeur*/
 }
-
 
 void initColor(color* color){
 
@@ -37,7 +34,7 @@ void initRectVertClair(rect* rect, segment* segment){
 
 }
 
-void initPositionTimer(rect* rectNoirTimer, segment* segment,text* positionTimer){
+void initTimer(rect* rectNoirTimer, segment* segment,text* positionTimer, infoTimer* infoTimer,unsigned long microsecondes){
 
 	/*---RECT NOIR DE CAHCHE---*/
     rectNoirTimer->x = segment->a;
@@ -45,14 +42,18 @@ void initPositionTimer(rect* rectNoirTimer, segment* segment,text* positionTimer
 	rectNoirTimer->l = segment->c;
 	rectNoirTimer->h = segment->b;
 
-	/*---POSITION TIMER (affichage text)---*/
+	/*---AFFICHAGE TIMER---*/
 	positionTimer-> x = segment->a;
 	positionTimer-> y = segment->hauteur - (int)(segment->b/3);
+	sprintf(positionTimer->string, "%02d:%02d",0,0);
+
+	/*---INFO COMPLEMENTAIRE---*/
+	infoTimer->compteurMicrosec = microsecondes + CYCLE;
+	infoTimer->compteurSec= 0;
 
 }
 
-
-void initfenetre(color* color, rect* rectVertClair, segment* segment,infoTimer* infoTimer,text* positionTimer){
+void initfenetre(color* color, rect* rectVertClair, segment* segment,text* positionTimer){
 
     /*-------------CREATION FENETRE----------------------*/
 
@@ -70,22 +71,25 @@ void initfenetre(color* color, rect* rectVertClair, segment* segment,infoTimer* 
 
     /*---TIMER--*/
     ChoisirCouleurDessin(color->blanc);
-    EcrireTexte(positionTimer->x,positionTimer->y,infoTimer->stringTemps,2);
+    EcrireTexte(positionTimer->x,positionTimer->y,positionTimer->string,2);
 
     /*---SCORES (A completer)---*/
 
 }
 
+void timer(unsigned long microsecondes, infoTimer* infoTimer,text* positionTimer,color* color,rect* rectNoirTimer){
 
-void afficherTimer(color* color,text* positionTimer,infoTimer* infoTimer, rect* rectNoirTimer,unsigned long microsecondes, int i){
+	if (!(microsecondes < infoTimer->compteurMicrosec)){
 
-	if(timer(microsecondes,i,infoTimer) == 1){
-	ChoisirCouleurDessin(color->noir);
-	RemplirRectangle(rectNoirTimer->x,rectNoirTimer->y,rectNoirTimer->l,rectNoirTimer->h);
-	ChoisirCouleurDessin(color->blanc);
-	EcrireTexte(positionTimer->x,positionTimer->y,infoTimer->stringTemps,2);
+		infoTimer->compteurMicrosec += CYCLE;
+		infoTimer->compteurSec++;
+		sprintf(positionTimer->string, "%02d:%02d",(int)(infoTimer->compteurSec/60),infoTimer->compteurSec%60);
+		ChoisirCouleurDessin(color->noir);
+		RemplirRectangle(rectNoirTimer->x,rectNoirTimer->y,rectNoirTimer->l,rectNoirTimer->h);
+		ChoisirCouleurDessin(color->blanc);
+		EcrireTexte(positionTimer->x,positionTimer->y,positionTimer->string,2);
+
 	}
-
 
 }
 

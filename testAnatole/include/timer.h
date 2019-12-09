@@ -4,7 +4,7 @@
 #include<stdlib.h>
 #include <stdio.h>
 
-typedef struct infoTimer{
+/*typedef struct {
 
     unsigned long secBorneSup;
 	char stringTemps[10];
