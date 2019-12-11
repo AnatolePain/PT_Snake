@@ -1,8 +1,4 @@
-#include<stdlib.h>
-#include <stdio.h>
 #include "include/dessin.h"
-#include<graph.h>
-#define CYCLE 1000000L
 
 
 void initSegment(segment* segment, int largeur,rect* rectVertClair){
@@ -24,6 +20,7 @@ void initColor(color* color){
     color->jaune = CouleurParNom("yellow");
 	color->noir = CouleurParNom("black");
 	color->rouge = CouleurParNom("red");
+	color->bleu = CouleurParNom("blue");
 	color->blanc = CouleurParNom("white");
 	color->vertClair = CouleurParComposante(141,199,63);
 
@@ -50,6 +47,7 @@ void initTimer(rect* rectNoirTimer, segment* segment,text* positionTimer, infoTi
 
 void initfenetre(color* color, rect* rectVertClair, segment* segment,text* positionTimer){
 
+	int i = 0;
     /*-------------CREATION FENETRE----------------------*/
 
     InitialiserGraphique();
@@ -71,6 +69,36 @@ void initfenetre(color* color, rect* rectVertClair, segment* segment,text* posit
     /*---SCORES (A completer)---*/
 
 }
+
+/*void initAffichageSnake(body* body,position* coord){
+
+
+  initSnakeBody(&body);
+    if(firstEnqueue(&body, testCoord) == ALLOC_ERROR)
+    {
+        puts("Erreur d'allocation\n");
+        return EXIT_FAILURE;
+    }
+    for (i = 0; i < 9; i++)
+    {
+        testCoord.m_X = i;
+        testCoord.m_Y = i *2;
+        enqueue(&body, testCoord);
+    }
+
+    initCursor(&body);
+    
+    for (i = 0; i < 10; i++)
+    {
+        testCoord = getCursor(&body);
+        printf(" %3hhd| %3hhd\n", testCoord.m_X, testCoord.m_Y);
+        cursorNext(&body);
+    }
+
+
+}*/
+
+
 
 void timer(unsigned long microsecondes, infoTimer* infoTimer,text* positionTimer,color* color,rect* rectNoirTimer){
 

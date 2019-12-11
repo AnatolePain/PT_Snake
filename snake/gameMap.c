@@ -1,9 +1,4 @@
 #include "include/gameMap.h"
-#define INIT_SNAKE_SIZE 5
-#define GRASS 1
-#define SNAKE 2
-#define APPLE 3
-#define WALL 4
 
 int spawnSnake(grid* grid, body* body)
 {
@@ -66,7 +61,7 @@ void initGameMap(grid* grid)
         setValue(grid, pos, (unsigned char)WALL);
     }
 
-    pos.m_X = Y_SIZE;
+    pos.m_X = X_SIZE -1;
     for(i = 0; i < Y_SIZE; i++)
     {
         pos.m_Y = i;

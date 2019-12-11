@@ -1,7 +1,10 @@
 #ifndef DESSIN_H
 #define DESSIN_H
+
 #include<stdlib.h>
 #include <stdio.h>
+#include<graph.h>
+#define CYCLE 1000000L
 
 typedef struct segment{
 
@@ -17,6 +20,7 @@ typedef struct color{
  int noir;
  int jaune; 
  int rouge;
+ int bleu;
  int vertClair;
  int blanc;
 
@@ -56,6 +60,8 @@ void initColor(color* color);
 void initTimer(rect* rectNoirTimer, segment* segment,text* positionTimer, infoTimer* infoTimer,unsigned long microsecondes);
 
 void initfenetre(color* color, rect* rectVertClair, segment* segment,text* positionTimer);
+
+//void initAffichageSnake(body* body,position* coord);
 
 void timer(unsigned long microsecondes, infoTimer* infoTimer,text* positionTimer,color* color,rect* rectNoirTimer);
 
