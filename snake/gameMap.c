@@ -35,7 +35,7 @@ void destroySnake(body* body)
     body->m_queue = NULL;
 }
 
-void spawnApple(grid* grid)
+position spawnApple(grid* grid)
 {
     position pos;
     while (getValue(grid, pos) != (unsigned char)GRASS)
@@ -43,6 +43,7 @@ void spawnApple(grid* grid)
         pos = RandPos(grid);
     }
     setValue(grid, pos, (unsigned char)APPLE);
+    return pos;
 }
 
 position RandPos(grid* grid)
