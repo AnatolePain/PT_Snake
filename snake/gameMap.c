@@ -5,11 +5,11 @@ int spawnSnake(grid* grid, body* body)
     int i;
     position pos = {(unsigned char)(X_SIZE/2), (unsigned char)(Y_SIZE/2)};
 
-    if(firstEnqueue(body, pos))
+    if(firstEnqueue(body, pos) == ALLOC_ERROR)
     {
         return ALLOC_ERROR;
     }
-    setValue(grid, pos, (unsigned char)SNAKE);
+    setValue(grid, pos, 2);
 
     for (i = 0; i < INIT_SNAKE_SIZE - 1; i++)
     {
@@ -18,7 +18,8 @@ int spawnSnake(grid* grid, body* body)
         {
             return ALLOC_ERROR;
         }
-        setValue(grid, pos, (unsigned char)SNAKE);
+        setValue(grid, pos, 2);
+        printf(" vvv %hhd\n", getValue(grid, pos));
     }
 }
 
@@ -32,41 +33,6 @@ void destroySnake(body* body)
     free(body->m_head);
     body->m_head = NULL;
     body->m_queue = NULL;
-}
-
-void initGameMap(grid* grid)
-{
-    int i;
-    position pos;
-    initGrid(grid, (unsigned char)GRASS);
-
-    pos.m_Y = 0;
-    for(i = 0; i < X_SIZE; i++)
-    {
-        pos.m_X = i;
-        setValue(grid, pos, (unsigned char)WALL);
-    }
-
-    pos.m_Y = Y_SIZE - 1;
-    for(i = 0; i < X_SIZE; i++)
-    {
-        pos.m_X = i;
-        setValue(grid, pos, (unsigned char)WALL);
-    }
-
-    pos.m_X = 0;
-    for(i = 0; i < Y_SIZE; i++)
-    {
-        pos.m_Y = i;
-        setValue(grid, pos, (unsigned char)WALL);
-    }
-
-    pos.m_X = X_SIZE -1;
-    for(i = 0; i < Y_SIZE; i++)
-    {
-        pos.m_Y = i;
-        setValue(grid, pos, (unsigned char)WALL);
-    }
 }
 
 void spawnApple(grid* grid)

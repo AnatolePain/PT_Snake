@@ -30,13 +30,20 @@ int main(int argc, char * argv[]){
 
 	printf("TEST 02\n");
 	initSnakeBody(&body);
+	initGrid(&grid, (unsigned char)GRASS);
 	
 	printf("TEST 03\n");
-    initGameMap(&grid);
-    spawnSnake(&grid,&body);
-	printf("TEST 04\n");
+    if(spawnSnake(&grid,&body) == ALLOC_ERROR)
+    {
+    	perror("erreur d'allocation\n");
+    	return EXIT_FAILURE;
+    }
+    pos.m_X = (unsigned char)(X_SIZE/2);
+    pos.m_Y = (unsigned char)(Y_SIZE/2);
 
-	//pos = getHead(&body);
+	printf("TEST 04\n");
+	/*initGrid(&grid, (unsigned char)GRASS);*/
+	pos = getHead(&body);
 	printf("TEST 05\n");
 	initCursor(&body); 
 	printf("TEST 06\n");
@@ -52,12 +59,26 @@ int main(int argc, char * argv[]){
     /*--------------------------PARTIE B---------------------------*/
 
     
-    /*for (i = 0; i < 10; i++)
+    for (i = 0; i < 10; i++)
     {
-        //pos = getCursor(&body);
-        //printf(" %3hhd| %3hhd\n", pos.m_X, pos.m_Y);
+        pos = getCursor(&body);
+        printf(" %3hhd| %3hhd\n", pos.m_X, pos.m_Y);
         cursorNext(&body);
-    }*/
+    }
+    pos.m_Y = 20;
+    pos.m_X = 31;
+    printf(" bbb %hhd\n", getValue(&grid, pos));
+
+    for (i = 0; i < X_SIZE; ++i)
+    {
+    	for (j = 0; j < Y_SIZE; ++j)
+    	{
+    		pos.m_Y = j;
+    		pos.m_X = i;
+    		printf("%hhd|",getValue(&grid, pos));
+    	}
+    	puts("");
+    }
 
 
 	

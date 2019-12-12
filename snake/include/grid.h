@@ -2,13 +2,13 @@
 #define GRID_H
 
 #include "snake.h"
-#define X_SIZE 62
-#define Y_SIZE 42
+#define X_SIZE 60
+#define Y_SIZE 40
 #define ARGUMENT_ERROR 255;
 
 typedef struct
 {
-    unsigned char m_grid[60][40];
+    unsigned char m_grid[X_SIZE][Y_SIZE];
 }grid;
 
 void initGrid(grid* grid, unsigned char value);

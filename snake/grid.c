@@ -20,7 +20,8 @@ int setValue(grid* grid, position position, unsigned char value)
     if (position.m_X < X_SIZE && position.m_Y < Y_SIZE && value != 255)
     {
         grid->m_grid[position.m_X][position.m_Y] = value;
-        return SUCCESS;;
+        printf("%hhd | %hhd\n", position.m_X, position.m_Y);
+        return SUCCESS;
     }
     else
     {
