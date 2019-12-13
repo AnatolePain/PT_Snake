@@ -12,6 +12,7 @@ int main(int argc, char * argv[]){
 	int indicateur = 0;
 	int sensDeplacement = DROITE;
 	int score = 0;
+	srand(time(NULL));
 
 	/*--------------------------PARTIE B---------------------------*/
     body body;

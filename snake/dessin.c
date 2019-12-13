@@ -115,12 +115,14 @@ void afficherSnake(body* body,position* pos, color* color,segment* segment, grid
 
 	if(getValue(grid,*pos) == APPLE){
 		setValue(grid,*pos, GRASS);
-		*score += 50;
-		initCursor(body);
-    	queueToHead(body, *pos);
-    	setValue(grid, *pos, (unsigned char)SNAKE);
+		*score += 5;
+		enqueue(body, *pos);
+    	
 		
 	}else if (getValue(grid,*pos) == SNAKE){
+		printf("perdue\n");
+
+	}else if (isOutside(body)){
 		printf("perdue\n");
 	}else{
 		move(grid,body, *pos); /*les coordonnés de la tête est égale a 'pos'*/
@@ -185,10 +187,9 @@ void affichagePomme(color* color, segment* segment,grid* grid){
 
 
 	for(i=0;i<NOMBRE_DE_POMME;i++){
-		posPomme = RandPos(grid);
+		posPomme = spawnApple(grid);
 		ChoisirCouleurDessin(color->bleu);
 		RemplirRectangle(segment->a + ((int)posPomme.m_X)*(segment->b), segment->a + ((int)posPomme.m_Y)*(segment->b) ,  segment->b,  segment->b );
-		setValue(grid,posPomme, (unsigned char)APPLE);
 		printf("\nTEST 405\n");
 		printf("TEST 406 %3hhd| %3hhd\n", posPomme.m_X, posPomme.m_Y);
 	}
@@ -231,10 +232,12 @@ void fonctionScore(color* color, rect* rectNoirScore, text* positionScore, int s
 
 }
 
-void escape(){
+void escape(infoTimer* infoTimer){
 
 	int t;
 	int i = 1;
+
+	
 	
 	while(i == 1 ){
 

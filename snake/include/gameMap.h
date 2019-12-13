@@ -20,5 +20,7 @@ position RandPos(grid* grid); /* génère une position aléatoire */
 
 void move(grid* grid, body* body, position position);
 
+int isOutside(body* body);
+
 #endif
 

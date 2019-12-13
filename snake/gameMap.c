@@ -43,15 +43,15 @@ position spawnApple(grid* grid)
         pos = RandPos(grid);
     }
     setValue(grid, pos, (unsigned char)APPLE);
+    printf("bite %hhd, %hhd ", pos.m_X, pos.m_Y);
     return pos;
 }
 
 position RandPos(grid* grid)
 {
     position pos;
-    srand(time(NULL));
-    pos.m_X = (unsigned char)((rand() % (X_SIZE - 2)) + 1);
-    pos.m_Y = (unsigned char)((rand() % (Y_SIZE - 2)) + 1);
+    pos.m_X = (unsigned char)(rand() % X_SIZE);
+    pos.m_Y = (unsigned char)(rand() % Y_SIZE);
     return pos;
 }
 
@@ -61,4 +61,15 @@ void move(grid* grid, body* body, position position)
     setValue(grid,getCursor(body),(unsigned char)GRASS);
     queueToHead(body, position);
     setValue(grid, position, (unsigned char)SNAKE);
+}
+
+int isOutside(body* body)
+{
+	if(body->m_head->m_position.m_X < 0 || body->m_head->m_position.m_X >= X_SIZE || body->m_head->m_position.m_Y < 0 || body->m_head->m_position.m_Y >= Y_SIZE)
+	{
+		return TRUE;
+	} else
+	{
+		return FALSE;
+	}
 }
