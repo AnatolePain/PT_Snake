@@ -18,5 +18,7 @@ position spawnApple(grid* grid); /* met une pomme à un endroit libre de la gril
 
 position RandPos(grid* grid); /* génère une position aléatoire */
 
+void move(grid* grid, body* body, position position);
+
 #endif
 

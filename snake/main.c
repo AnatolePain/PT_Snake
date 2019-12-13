@@ -9,12 +9,14 @@
 int main(int argc, char * argv[]){
 
 	int i,j,k = 0;
+	int indicateur = 0;
+	int sensDeplacement = DROITE;
+	int score = 0;
 
 	/*--------------------------PARTIE B---------------------------*/
-	printf("TEST 01\n");
     body body;
     grid grid;
-	position pos = {0,0};
+	position pos;
 
 	/*---------------------------PARTIE A---------------------------*/
 
@@ -22,17 +24,16 @@ int main(int argc, char * argv[]){
 	color color;
 	rect rectVertClair;
 	rect rectNoirTimer;
+	rect rectNoirScore;
 	text positionTimer;
+	text positionScore;
 	infoTimer infoTimer;
-
 
 	/*--------------------------PARTIE B---------------------------*/
 
-	printf("TEST 02\n");
 	initSnakeBody(&body);
 	initGrid(&grid, (unsigned char)GRASS);
 	
-	printf("TEST 03\n");
     if(spawnSnake(&grid,&body) == ALLOC_ERROR)
     {
     	perror("erreur d'allocation\n");
@@ -40,99 +41,44 @@ int main(int argc, char * argv[]){
     }
     pos.m_X = (unsigned char)(X_SIZE/2);
     pos.m_Y = (unsigned char)(Y_SIZE/2);
-
-	printf("TEST 04\n");
-	/*initGrid(&grid, (unsigned char)GRASS);*/
 	pos = getHead(&body);
-	printf("TEST 05\n");
-	initCursor(&body); 
-	printf("TEST 06\n");
 	
 	/*---------------------------PARTIE A---------------------------*/
 
 
 	initSegment(&segment, LARGEUR,&rectVertClair);
 	initTimer(&rectNoirTimer, &segment,&positionTimer,&infoTimer,Microsecondes());
+	initScore(&rectNoirScore,&segment,&positionScore);
 	initfenetre(&color,&rectVertClair,&segment,&positionTimer);
-    //initAffichageSnake(body* body,position* coord);
-
-    /*--------------------------PARTIE B---------------------------*/
-
-    
-    for (i = 0; i < 10; i++)
-    {
-        pos = getCursor(&body);
-        printf(" %3hhd| %3hhd\n", pos.m_X, pos.m_Y);
-        cursorNext(&body);
-    }
-    pos.m_Y = 20;
-    pos.m_X = 31;
-    printf(" bbb %hhd\n", getValue(&grid, pos));
-
-    for (i = 0; i < X_SIZE; ++i)
-    {
-    	for (j = 0; j < Y_SIZE; ++j)
-    	{
-    		pos.m_Y = j;
-    		pos.m_X = i;
-    		printf("%hhd|",getValue(&grid, pos));
-    	}
-    	puts("");
-    }
 
 
-	
+    /*---------------------------PARTIE B---------------------------*/
 
-   
-    /*---------------------------PARTIE A---------------------------*/
+	initAffichageSnake(&body,&pos,&color,&segment);
+	affichagePomme(&color, &segment,&grid);
+
+	/*---------------BOUCLE WHILE DESSIN------------*/
 
 	while (True){
 
 	    timer(Microsecondes(), &infoTimer,&positionTimer,&color,&rectNoirTimer);
 
+	
+		if(infoTimer.compteurVitesse != indicateur && infoTimer.stop !=1){
 
+			afficherSnake(&body,&pos,&color,&segment,&grid,&sensDeplacement,&score);
+			fonctionScore(&color, &rectNoirScore, &positionScore,score);
+			indicateur = infoTimer.compteurVitesse;
 
-        /*for (i = 0; i < 10; i++){
-
-            testCoord = getCursor(&body);
-            printf(" %3hhd| %3hhd\n", testCoord.m_X, testCoord.m_Y);
-            ChoisirCouleurDessin(color.jaune);
-            RemplirRectangle(segment.a + (int)testCoord.m_X*segment.b, segment.a + (int)testCoord.m_Y*segment.b ,  segment.b,  segment.b );
-            printf(" %d ET %3d\n", (int)testCoord.m_X, (int)testCoord.m_Y);
-
-
-            cursorNext(&body);
-        }*/
-
+		}
 
 
 		ChoisirCouleurDessin(color.rouge);
 		RemplirRectangle(31*segment.b,25*segment.b, segment.b, segment.b );
 		RemplirRectangle(29*segment.b,45*segment.b, segment.b, segment.b );
-        //RemplirRectangle(segment.a,segment.a, segment.b, segment.b );
-
-		/*for(i=;i<40;i++){
-
-			for(j=0;j<60;j++){
-
-			ChoisirCouleurDessin(color.rouge);
-			RemplirRectangle(j*segment.b,i*segment.b, segment.b, segment.b );
-
-			printf("test 01: j = %d et k = %d\n",j*segment.d, i*segment.d);
-			printf("test 02: segment.d = %d\n",segment.d);
-
-			}
-
-
-
-		}*/
-
-
-
-
 	}
 
-    Touche();
+    //Touche();
 	destroySnake(&body);
     FermerGraphique();
     return EXIT_SUCCESS;

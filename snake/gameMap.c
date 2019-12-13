@@ -54,3 +54,11 @@ position RandPos(grid* grid)
     pos.m_Y = (unsigned char)((rand() % (Y_SIZE - 2)) + 1);
     return pos;
 }
+
+void move(grid* grid, body* body, position position)
+{
+    initCursor(body);
+    setValue(grid,getCursor(body),(unsigned char)GRASS);
+    queueToHead(body, position);
+    setValue(grid, position, (unsigned char)SNAKE);
+}
