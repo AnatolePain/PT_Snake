@@ -1,17 +1,17 @@
 #include "include/dessin.h"
 
 
-void initSegment(segment* segment, int largeur,rect* rectVertClair){
+void initSegment(segment* seg, int largeur,rect* rectVertClair){
 
-	segment->largeur = largeur;
-	segment->a = (int)(0.02*segment->largeur);	/*a = 2% de la largeur*/
-	rectVertClair->l = segment->largeur - 2*segment->a;
-	segment->b = (int)rectVertClair->l/60;
-	rectVertClair->h = 40*segment->b;
-	segment->hauteur = segment->a + rectVertClair->h + 5*segment->a;
+	seg->largeur = largeur;
+	seg->a = (int)(0.02*seg->largeur);	/*a = 2% de la largeur*/
+	rectVertClair->l = seg->largeur - 2*seg->a;
+	seg->b = (int)rectVertClair->l/60;
+	rectVertClair->h = 40*seg->b;
+	seg->hauteur = seg->a + rectVertClair->h + 5*seg->a;
 
-	rectVertClair->x = segment->a;
-	rectVertClair->y = segment->a;	
+	rectVertClair->x = seg->a;
+	rectVertClair->y = seg->a;	
 }
 
 
@@ -21,54 +21,54 @@ void initColor(color* color){
 	color->noir = CouleurParNom("black");
 	color->rouge = CouleurParNom("red");
 	color->bleu = CouleurParNom("blue");
+	color->grisBis = CouleurParComposante(118, 111, 100);
 	color->blanc = CouleurParNom("white");
 	color->vertClair = CouleurParComposante(141,199,63);
 
 }
 
-void initTimer(rect* rectNoirTimer, segment* segment,text* positionTimer, infoTimer* infoTimer,unsigned long microsecondes){
+void initTimer(rect* rectNoirTimer, segment* seg,text* positionTimer, infoTimer* infoTimer,unsigned long microsecondes){
 
 	/*---RECT NOIR DE CAHCHE---*/
-    rectNoirTimer->x = segment->a;
-	rectNoirTimer->y = segment->hauteur -5*segment->a;
-	rectNoirTimer->l = 7*segment->b;
-	rectNoirTimer->h = 5*segment->a;
+    rectNoirTimer->x = seg->a;
+	rectNoirTimer->y = seg->hauteur -5*seg->a;
+	rectNoirTimer->l = 7*seg->b;
+	rectNoirTimer->h = 5*seg->a;
 
 	/*---AFFICHAGE TIMER---*/
-	positionTimer-> x = 2*segment->a;
-	positionTimer-> y = segment->hauteur - 2*segment->a;
+	positionTimer-> x = 2*seg->a;
+	positionTimer-> y = seg->hauteur - 2*seg->a;
 	sprintf(positionTimer->string, "%02d:%02d",0,0);
 
 	/*---INFO COMPLEMENTAIRE---*/
 	infoTimer->compteurMicrosec = microsecondes + CYCLE;
 	infoTimer->compteurMicrosecVitesse = microsecondes + VITESSE_SNAKE;
 	infoTimer->compteurSec= 0;
-	infoTimer->stop = 0;
 
 }
 
-void initScore(rect* rectNoirScore, segment* segment,text* positionScore){
+void initScore(rect* rectNoirScore, segment* seg,text* positionScore){
 
 	/*---RECT NOIR DE CAHCHE---*/
-    rectNoirScore->x = segment->largeur - 7*segment->a;
-	rectNoirScore->y = segment->hauteur -5*segment->a;
-	rectNoirScore->l = 7*segment->b;
-	rectNoirScore->h = 5*segment->a;
+    rectNoirScore->x = seg->largeur - 9*seg->a;
+	rectNoirScore->y = seg->hauteur -5*seg->a;
+	rectNoirScore->l = 9*seg->a;
+	rectNoirScore->h = 5*seg->a;
 
 	/*---AFFICHAGE TIMER---*/
-	positionScore-> x = segment->largeur - 8*segment->a;
-	positionScore-> y = segment->hauteur - 2*segment->a;
+	positionScore-> x = seg->largeur - 8*seg->a;
+	positionScore-> y = seg->hauteur - 2*seg->a;
 	sprintf(positionScore->string, "07d",0);
 
 }
 
-void initfenetre(color* color, rect* rectVertClair, segment* segment,text* positionTimer){
+void initfenetre(color* color, rect* rectVertClair, segment* seg,text* positionTimer){
 
 	int i = 0;
     /*-------------CREATION FENETRE----------------------*/
 
     InitialiserGraphique();
-	CreerFenetre(400,150,segment->largeur,segment->hauteur);
+	CreerFenetre(400,150,seg->largeur,seg->hauteur);
 	initColor(color);
     EffacerEcran(color->noir);
 
@@ -87,51 +87,37 @@ void initfenetre(color* color, rect* rectVertClair, segment* segment,text* posit
 
 }
 
-void initAffichageSnake(body* body,position* pos, color* color,segment* segment){
+void initAffichageSnake(body* body,position* pos, color* color,segment* seg){
 
 	int i, j;
-
     initCursor(body); 
 
 	for (i = 0; i < 10; i++){
 		*pos = getCursor(body);
 		printf("TEST 01 %3hhd| %3hhd\n", pos->m_X, pos->m_Y);
 		ChoisirCouleurDessin(color->jaune);
-		RemplirRectangle(segment->a + ((int)pos->m_X)*(segment->b), segment->a + ((int)pos->m_Y)*(segment->b) ,  segment->b,  segment->b );
+		RemplirRectangle(seg->a + ((int)pos->m_X)*(seg->b), seg->a + ((int)pos->m_Y)*(seg->b) ,  seg->b,  seg->b );
 		cursorNext(body);
    	}
 
-
 }
 
-void afficherSnake(body* body,position* pos, color* color,segment* segment, grid*  grid,int *sensDeplacement, int* score){
+void afficherSnake(body* body,position* pos, color* color,segment* seg, grid*  grid,int *sensDeplacement, int* score, int* startGo){
 
 	int t;
-
-	position sauvegardePos; /*sauvegarde la queu*/	
+	int indicateur = 0;
+	position savePos; /*sauvegarde la queu*/	
 	
-	initCursor(body);
-	sauvegardePos = getCursor(body);
-
-	if(getValue(grid,*pos) == APPLE){
-		setValue(grid,*pos, GRASS);
-		*score += 5;
-		enqueue(body, *pos);
-    	
-		
-	}else if (getValue(grid,*pos) == SNAKE){
-		printf("perdue\n");
-
-	}else if (isOutside(body)){
-		printf("perdue\n");
-	}else{
-		move(grid,body, *pos); /*les coordonnés de la tête est égale a 'pos'*/
-	}
+	initCursor(body);				/*|*/
+	savePos = getCursor(body);		/*| met le curseur sur la queu*/ 
 		
 	if(ToucheEnAttente() == 1){
-	t = Touche();
+		t = Touche();
 
-		if(t == XK_Left && *sensDeplacement != DROITE){
+		if(t == XK_space){
+			pause();
+			indicateur = 1;
+		}else if(t == XK_Left && *sensDeplacement != DROITE){
 			*sensDeplacement = GAUCHE;
 			fonctionSensDeplacement(pos,*sensDeplacement);
 		}else if(t == XK_Right && *sensDeplacement != GAUCHE){
@@ -143,8 +129,6 @@ void afficherSnake(body* body,position* pos, color* color,segment* segment, grid
 		}else if(t == XK_Down && *sensDeplacement != HAUT){
 			*sensDeplacement = BAS;
 			fonctionSensDeplacement(pos,*sensDeplacement);
-		}else if(t == XK_Escape){
-			escape();
 		}else{
 			fonctionSensDeplacement(pos,*sensDeplacement);
 		}
@@ -153,13 +137,28 @@ void afficherSnake(body* body,position* pos, color* color,segment* segment, grid
 		fonctionSensDeplacement(pos,*sensDeplacement);
 	}
 
-	
+	if(getValue(grid,*pos) == APPLE){
 
+		setValue(grid,*pos, GRASS);
+		*score += 5;
+		enqueue(body, *pos);
+		affichagePomme(color,seg,grid);
+		
+	}else if ( getValue(grid,*pos) == SNAKE && indicateur != 1){
+		exitFunction(startGo, seg, color);
+	}else if (isOutside(body)){
+		exitFunction(startGo, seg, color);
+	}else if(getValue(grid,*pos) == WALL){
+		exitFunction(startGo, seg, color);
+	}else{
+		move(grid,body, *pos); /*les coordonnés de la tête est égale a 'pos'*/
+	}
+	
 	ChoisirCouleurDessin(color->vertClair);
-	RemplirRectangle(segment->a + ((int)sauvegardePos.m_X)*(segment->b), segment->a + ((int)sauvegardePos.m_Y)*(segment->b) ,  segment->b,  segment->b ); /*queu*/
+	RemplirRectangle(seg->a + ((int)savePos.m_X)*(seg->b), seg->a + ((int)savePos.m_Y)*(seg->b) ,  seg->b,  seg->b ); /*queu*/
 
 	ChoisirCouleurDessin(color->jaune);
-	RemplirRectangle(segment->a + ((int)pos->m_X)*(segment->b), segment->a + ((int)pos->m_Y)*(segment->b) ,  segment->b,  segment->b ); 	/*tete*/
+	RemplirRectangle(seg->a + ((int)pos->m_X)*(seg->b), seg->a + ((int)pos->m_Y)*(seg->b) ,  seg->b,  seg->b ); 	/*tete*/
 
 
 }
@@ -179,32 +178,47 @@ void fonctionSensDeplacement(position* pos, int sensDeplacement){
 }
 
 
-void affichagePomme(color* color, segment* segment,grid* grid){
+void initAffichagePomme(color* color, segment* seg,grid* grid){
 
 	int i;
 	position posPomme;
-	printf("\nTEST 404\n");
-
 
 	for(i=0;i<NOMBRE_DE_POMME;i++){
 		posPomme = spawnApple(grid);
-		ChoisirCouleurDessin(color->bleu);
-		RemplirRectangle(segment->a + ((int)posPomme.m_X)*(segment->b), segment->a + ((int)posPomme.m_Y)*(segment->b) ,  segment->b,  segment->b );
-		printf("\nTEST 405\n");
-		printf("TEST 406 %3hhd| %3hhd\n", posPomme.m_X, posPomme.m_Y);
+		ChoisirCouleurDessin(color->rouge);
+		RemplirRectangle(seg->a + ((int)posPomme.m_X)*(seg->b), seg->a + ((int)posPomme.m_Y)*(seg->b) ,  seg->b,  seg->b );
 	}
 }
 
+void affichagePomme(color* color, segment* seg,grid* grid){
+
+	position posPomme;
+	posPomme = spawnApple(grid);
+	ChoisirCouleurDessin(color->rouge);
+	RemplirRectangle(seg->a + ((int)posPomme.m_X)*(seg->b), seg->a + ((int)posPomme.m_Y)*(seg->b) ,  seg->b,  seg->b );
+}
 
 
+void initSpawnCaillou(color* color, segment* seg,grid* grid){
+
+	int i;
+	position posCaillou;
+
+	for(i=0;i<NOMBRE_DE_CAILLOU;i++){
+		posCaillou = spawnWall(grid);
+		ChoisirCouleurDessin(color->grisBis);
+		RemplirRectangle(seg->a + ((int)posCaillou.m_X)*(seg->b), seg->a + ((int)posCaillou.m_Y)*(seg->b) ,  seg->b,  seg->b );
+	}
+
+}
 
 
 
 void timer(unsigned long microsecondes, infoTimer* infoTimer,text* positionTimer,color* color,rect* rectNoirTimer){
 
-	if (!(microsecondes < infoTimer->compteurMicrosec)  && infoTimer->stop !=1 ){
+	if (microsecondes > infoTimer->compteurMicrosec){
 
-		infoTimer->compteurMicrosec += CYCLE;
+		infoTimer->compteurMicrosec = microsecondes + CYCLE;
 		infoTimer->compteurSec++;
 		sprintf(positionTimer->string, "%02d:%02d",(int)(infoTimer->compteurSec/60),infoTimer->compteurSec%60);
 		ChoisirCouleurDessin(color->noir);
@@ -215,14 +229,14 @@ void timer(unsigned long microsecondes, infoTimer* infoTimer,text* positionTimer
 	}
 
 	if (!(microsecondes < infoTimer->compteurMicrosecVitesse)){
-		infoTimer->compteurMicrosecVitesse += VITESSE_SNAKE;
+		infoTimer->compteurMicrosecVitesse = microsecondes + VITESSE_SNAKE;
 		infoTimer->compteurVitesse++;
 	}
 
 
 }
 
-void fonctionScore(color* color, rect* rectNoirScore, text* positionScore, int score ){
+void affichageScore(color* color, rect* rectNoirScore, text* positionScore, int score ){
 
 	sprintf(positionScore->string, "%07d",score);
 	ChoisirCouleurDessin(color->noir);
@@ -232,25 +246,50 @@ void fonctionScore(color* color, rect* rectNoirScore, text* positionScore, int s
 
 }
 
-void escape(infoTimer* infoTimer){
+void pause(){
 
+	int indicateur = 1;
 	int t;
-	int i = 1;
-
-	
-	
-	while(i == 1 ){
+	while(indicateur == 1){
 
 		if(ToucheEnAttente() == 1){
 			t = Touche();
-			if(t == XK_Escape){
-				i = 0;
+			if(t == XK_space){
+			 indicateur = 0;
+			}
+		}
+
+	}
+}
+
+void exitFunction(int *startGo, segment* seg, color* color){
+
+	int indicateur = 1;
+	int t;
+	char string1[50] = "GAME OVER";
+	char string2[50] = "presse q to exit";
+
+	int tailleString1 = TailleChaineEcran(string1,2);
+	int tailleString2 = TailleChaineEcran(string2,2);
+
+	int texteAuMilieu1 =  (int)( ( (seg->largeur) - tailleString1 ) / 2 );
+	int texteAuMilieu2 =  (int)( ( (seg->largeur) - tailleString2 ) / 2 );
+
+	ChoisirCouleurDessin(color->blanc);
+	EcrireTexte(texteAuMilieu1,(int)(seg->a + 40*seg->b /2),string1,2);
+	EcrireTexte(texteAuMilieu2,(int)(seg->a + 40*seg->b /2) + 2*seg->a ,string2,2);
+
+	while(indicateur == 1){
+
+		if(ToucheEnAttente() == 1){
+			t = Touche();
+			if(t == XK_q || t == XK_Q){
+			 indicateur = 0;
 			}
 		}
 
 	}
 
+	*startGo = STOP;
 
 }
-
-

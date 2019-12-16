@@ -9,9 +9,9 @@
 int main(int argc, char * argv[]){
 
 	int i,j,k = 0;
-	int indicateur = 0;
 	int sensDeplacement = DROITE;
 	int score = 0;
+	int startGo = 0;
 	srand(time(NULL));
 
 	/*--------------------------PARTIE B---------------------------*/
@@ -21,7 +21,7 @@ int main(int argc, char * argv[]){
 
 	/*---------------------------PARTIE A---------------------------*/
 
-	segment segment;
+	segment seg;
 	color color;
 	rect rectVertClair;
 	rect rectNoirTimer;
@@ -46,40 +46,36 @@ int main(int argc, char * argv[]){
 	
 	/*---------------------------PARTIE A---------------------------*/
 
+	initSegment(&seg, LARGEUR,&rectVertClair);
+	initTimer(&rectNoirTimer, &seg,&positionTimer,&infoTimer,Microsecondes());
+	initScore(&rectNoirScore,&seg,&positionScore);
+	initfenetre(&color,&rectVertClair,&seg,&positionTimer);
+	initAffichageSnake(&body,&pos,&color,&seg);
+	initAffichagePomme(&color, &seg,&grid);
+	initSpawnCaillou(&color, &seg,&grid);
 
-	initSegment(&segment, LARGEUR,&rectVertClair);
-	initTimer(&rectNoirTimer, &segment,&positionTimer,&infoTimer,Microsecondes());
-	initScore(&rectNoirScore,&segment,&positionScore);
-	initfenetre(&color,&rectVertClair,&segment,&positionTimer);
-
-
-    /*---------------------------PARTIE B---------------------------*/
-
-	initAffichageSnake(&body,&pos,&color,&segment);
-	affichagePomme(&color, &segment,&grid);
 
 	/*---------------BOUCLE WHILE DESSIN------------*/
 
-	while (True){
+	while (startGo != STOP ){
 
 	    timer(Microsecondes(), &infoTimer,&positionTimer,&color,&rectNoirTimer);
 
 	
-		if(infoTimer.compteurVitesse != indicateur && infoTimer.stop !=1){
+		if(infoTimer.compteurVitesse > i){
 
-			afficherSnake(&body,&pos,&color,&segment,&grid,&sensDeplacement,&score);
-			fonctionScore(&color, &rectNoirScore, &positionScore,score);
-			indicateur = infoTimer.compteurVitesse;
+			afficherSnake(&body,&pos,&color,&seg,&grid,&sensDeplacement,&score,&startGo);
+			affichageScore(&color, &rectNoirScore, &positionScore,score);
+			i = infoTimer.compteurVitesse;
+
 
 		}
 
-
 		ChoisirCouleurDessin(color.rouge);
-		RemplirRectangle(31*segment.b,25*segment.b, segment.b, segment.b );
-		RemplirRectangle(29*segment.b,45*segment.b, segment.b, segment.b );
 	}
 
-    //Touche();
+	
+
 	destroySnake(&body);
     FermerGraphique();
     return EXIT_SUCCESS;

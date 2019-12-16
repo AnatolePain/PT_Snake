@@ -16,6 +16,8 @@ void destroySnake(body* body); /* "enlève" (free) le snake de la mémoire */
 
 position spawnApple(grid* grid); /* met une pomme à un endroit libre de la grille */
 
+position spawnWall(grid* grid); /* met un "mur"(un caillou) à un endroit libre de la grille */
+
 position RandPos(grid* grid); /* génère une position aléatoire */
 
 void move(grid* grid, body* body, position position);

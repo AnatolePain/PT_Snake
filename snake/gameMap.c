@@ -47,6 +47,18 @@ position spawnApple(grid* grid)
     return pos;
 }
 
+position spawnWall(grid* grid){
+
+    position pos;
+    while (getValue(grid, pos) != (unsigned char)GRASS){
+        pos = RandPos(grid);
+    }
+    
+    setValue(grid, pos, (unsigned char)WALL);
+    printf("bite %hhd, %hhd ", pos.m_X, pos.m_Y);
+    return pos;
+}
+
 position RandPos(grid* grid)
 {
     position pos;
