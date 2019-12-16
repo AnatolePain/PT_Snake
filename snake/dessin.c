@@ -4,8 +4,8 @@
 void initSegment(segment* seg, int largeur,rect* rectVertClair){
 
 	seg->largeur = largeur;
-	seg->a = (int)(0.02*seg->largeur);	/*a = 2% de la largeur*/
-	rectVertClair->l = seg->largeur - 2*seg->a;
+	seg->a = (int)(0.02*seg->largeur); 	/*a = 2% de la longeuret coresond au bande noir  a droite et gauche*/
+	rectVertClair->l = seg->largeur - 2*seg->a; 
 	seg->b = (int)rectVertClair->l/60;
 	rectVertClair->h = 40*seg->b;
 	seg->hauteur = seg->a + rectVertClair->h + 5*seg->a;
@@ -13,7 +13,6 @@ void initSegment(segment* seg, int largeur,rect* rectVertClair){
 	rectVertClair->x = seg->a;
 	rectVertClair->y = seg->a;	
 }
-
 
 void initColor(color* color){
 
@@ -42,8 +41,9 @@ void initTimer(rect* rectNoirTimer, segment* seg,text* positionTimer, infoTimer*
 
 	/*---INFO COMPLEMENTAIRE---*/
 	infoTimer->compteurMicrosec = microsecondes + CYCLE;
-	infoTimer->compteurMicrosecVitesse = microsecondes + VITESSE_SNAKE;
-	infoTimer->compteurSec= 0;
+	infoTimer->compteurMicrosecVitesse = microsecondes + VITESSE_SNAKE_DEMARAGE;
+	infoTimer->compteurSec = 0;
+	infoTimer->acceleration = ACCELERATION_SNAKE;
 
 }
 
@@ -62,9 +62,8 @@ void initScore(rect* rectNoirScore, segment* seg,text* positionScore){
 
 }
 
-void initfenetre(color* color, rect* rectVertClair, segment* seg,text* positionTimer){
+void initfenetre(color* color, rect* rectVertClair, segment* seg,text* positionTimer,text* positionScore){
 
-	int i = 0;
     /*-------------CREATION FENETRE----------------------*/
 
     InitialiserGraphique();
@@ -84,6 +83,8 @@ void initfenetre(color* color, rect* rectVertClair, segment* seg,text* positionT
     EcrireTexte(positionTimer->x,positionTimer->y,positionTimer->string,2);
 
     /*---SCORES (A completer)---*/
+	ChoisirCouleurDessin(color->blanc);
+    EcrireTexte(positionScore->x,positionScore->y,positionScore->string,2);
 
 }
 
@@ -92,9 +93,8 @@ void initAffichageSnake(body* body,position* pos, color* color,segment* seg){
 	int i, j;
     initCursor(body); 
 
-	for (i = 0; i < 10; i++){
+	for (i = 0; i < INIT_SNAKE_SIZE; i++){
 		*pos = getCursor(body);
-		printf("TEST 01 %3hhd| %3hhd\n", pos->m_X, pos->m_Y);
 		ChoisirCouleurDessin(color->jaune);
 		RemplirRectangle(seg->a + ((int)pos->m_X)*(seg->b), seg->a + ((int)pos->m_Y)*(seg->b) ,  seg->b,  seg->b );
 		cursorNext(body);
@@ -102,9 +102,9 @@ void initAffichageSnake(body* body,position* pos, color* color,segment* seg){
 
 }
 
-void afficherSnake(body* body,position* pos, color* color,segment* seg, grid*  grid,int *sensDeplacement, int* score, int* startGo, int* indicateur2){
+void afficherSnake(body* body,position* pos, color* color,segment* seg, grid*  grid,int *sensDeplacement, int* score, int* startGo){
 
-	int t;
+	int t, i;
 	int indicateur = 0;
 	position savePos; /*sauvegarde la queu*/	
 	
@@ -117,6 +117,9 @@ void afficherSnake(body* body,position* pos, color* color,segment* seg, grid*  g
 		if(t == XK_space){
 			pause();
 			indicateur = 1;
+		}else if(t == XK_Escape){
+			indicateur = 1;
+			*startGo = STOP;
 		}else if(t == XK_Left && *sensDeplacement != DROITE){
 			*sensDeplacement = GAUCHE;
 			fonctionSensDeplacement(pos,*sensDeplacement);
@@ -137,40 +140,40 @@ void afficherSnake(body* body,position* pos, color* color,segment* seg, grid*  g
 		fonctionSensDeplacement(pos,*sensDeplacement);
 	}
 
-	if(getValue(grid,*pos) == APPLE || *indicateur2 == 1){
+	if(getValue(grid,*pos) == APPLE ){
 
 		setValue(grid,*pos, GRASS);
-		*score += 5;
+		affichagePomme(color,seg,grid);
+		*score += SCORE_PAR_POMME;
+	
+		for(i=0 ; i<ALLONGEMENT_SNAKE; i++){
+
+		setValue(grid,*pos, GRASS);
 		enqueue(body, *pos);
 		setValue(grid, *pos, (unsigned char)SNAKE);
-		affichagePomme(color,seg,grid);
+		ChoisirCouleurDessin(color->vertClair);
+		RemplirRectangle(seg->a + ((int)savePos.m_X)*(seg->b), seg->a + ((int)savePos.m_Y)*(seg->b) ,  seg->b,  seg->b ); /*queu*/
 
-		*indicateur2 = *indicateur2 + 1;
+		ChoisirCouleurDessin(color->jaune);
+		RemplirRectangle(seg->a + ((int)pos->m_X)*(seg->b), seg->a + ((int)pos->m_Y)*(seg->b) ,  seg->b,  seg->b ); 	/*tete*/
 
-		if(*indicateur2 == 2){
-			*indicateur2 = 0;
 		}
-
-		printf("valeur indicateur2 =  %d\n",*indicateur2);
-
 
 		
 	}else if ( getValue(grid,*pos) == SNAKE && indicateur != 1){
 		exitFunction(startGo, seg, color);
-	}else if (isOutside(body)){
+	}else if (isOutside(body)){		
 		exitFunction(startGo, seg, color);
 	}else if(getValue(grid,*pos) == WALL){
 		exitFunction(startGo, seg, color);
 	}else{
 		move(grid,body, *pos); /*les coordonnés de la tête est égale a 'pos'*/
+		ChoisirCouleurDessin(color->vertClair);
+		RemplirRectangle(seg->a + ((int)savePos.m_X)*(seg->b), seg->a + ((int)savePos.m_Y)*(seg->b) ,  seg->b,  seg->b ); /*queu*/
+
+		ChoisirCouleurDessin(color->jaune);
+		RemplirRectangle(seg->a + ((int)pos->m_X)*(seg->b), seg->a + ((int)pos->m_Y)*(seg->b) ,  seg->b,  seg->b ); 	/*tete*/
 	}
-	
-	ChoisirCouleurDessin(color->vertClair);
-	RemplirRectangle(seg->a + ((int)savePos.m_X)*(seg->b), seg->a + ((int)savePos.m_Y)*(seg->b) ,  seg->b,  seg->b ); /*queu*/
-
-	ChoisirCouleurDessin(color->jaune);
-	RemplirRectangle(seg->a + ((int)pos->m_X)*(seg->b), seg->a + ((int)pos->m_Y)*(seg->b) ,  seg->b,  seg->b ); 	/*tete*/
-
 
 }
 
@@ -187,7 +190,6 @@ void fonctionSensDeplacement(position* pos, int sensDeplacement){
 	}
 
 }
-
 
 void initAffichagePomme(color* color, segment* seg,grid* grid){
 
@@ -209,7 +211,6 @@ void affichagePomme(color* color, segment* seg,grid* grid){
 	RemplirRectangle(seg->a + ((int)posPomme.m_X)*(seg->b), seg->a + ((int)posPomme.m_Y)*(seg->b) ,  seg->b,  seg->b );
 }
 
-
 void initSpawnCaillou(color* color, segment* seg,grid* grid){
 
 	int i;
@@ -222,8 +223,6 @@ void initSpawnCaillou(color* color, segment* seg,grid* grid){
 	}
 
 }
-
-
 
 void timer(unsigned long microsecondes, infoTimer* infoTimer,text* positionTimer,color* color,rect* rectNoirTimer){
 
@@ -239,9 +238,10 @@ void timer(unsigned long microsecondes, infoTimer* infoTimer,text* positionTimer
 
 	}
 
-	if (!(microsecondes < infoTimer->compteurMicrosecVitesse)){
-		infoTimer->compteurMicrosecVitesse = microsecondes + VITESSE_SNAKE;
+	if (microsecondes > infoTimer->compteurMicrosecVitesse){
+		infoTimer->compteurMicrosecVitesse = microsecondes + (VITESSE_SNAKE_DEMARAGE - infoTimer->acceleration);
 		infoTimer->compteurVitesse++;
+		infoTimer->acceleration += ACCELERATION_SNAKE;
 	}
 
 

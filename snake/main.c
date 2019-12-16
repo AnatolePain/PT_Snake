@@ -3,7 +3,7 @@
 #include<graph.h>
 #include "include/dessin.h"
 #include "include/gameMap.h"
-#define LARGEUR 1000
+#define LARGEUR_FENETRE 1000
 
  
 int main(int argc, char * argv[]){
@@ -12,7 +12,6 @@ int main(int argc, char * argv[]){
 	int sensDeplacement = DROITE;
 	int score = 0;
 	int startGo = 0;
-	int indicateur2 = 0;
 	srand(time(NULL));
 
 	/*--------------------------PARTIE B---------------------------*/
@@ -47,10 +46,10 @@ int main(int argc, char * argv[]){
 	
 	/*---------------------------PARTIE A---------------------------*/
 
-	initSegment(&seg, LARGEUR,&rectVertClair);
+	initSegment(&seg, LARGEUR_FENETRE,&rectVertClair);
 	initTimer(&rectNoirTimer, &seg,&positionTimer,&infoTimer,Microsecondes());
 	initScore(&rectNoirScore,&seg,&positionScore);
-	initfenetre(&color,&rectVertClair,&seg,&positionTimer);
+	initfenetre(&color,&rectVertClair,&seg,&positionTimer,&positionScore);
 	initAffichageSnake(&body,&pos,&color,&seg);
 	initAffichagePomme(&color, &seg,&grid);
 	initSpawnCaillou(&color, &seg,&grid);
@@ -65,7 +64,7 @@ int main(int argc, char * argv[]){
 	
 		if(infoTimer.compteurVitesse > i){
 
-			afficherSnake(&body,&pos,&color,&seg,&grid,&sensDeplacement,&score,&startGo,&indicateur2);
+			afficherSnake(&body,&pos,&color,&seg,&grid,&sensDeplacement,&score,&startGo);
 			affichageScore(&color, &rectNoirScore, &positionScore,score);
 			i = infoTimer.compteurVitesse;
 
@@ -74,19 +73,6 @@ int main(int argc, char * argv[]){
 
 		ChoisirCouleurDessin(color.rouge);
 	}
-
-	for (i = 0; i < Y_SIZE; i++)
-	{
-		for (j = 0; j < X_SIZE; j++)
-		{
-			pos.m_X = j;
-			pos.m_Y = i;
-			printf("%hhd|", getValue(&grid, pos));
-		}
-		puts("");
-	}
-
-	
 
 	destroySnake(&body);
     FermerGraphique();

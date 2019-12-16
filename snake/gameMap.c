@@ -19,7 +19,6 @@ int spawnSnake(grid* grid, body* body)
             return ALLOC_ERROR;
         }
         setValue(grid, pos, 2);
-        printf(" vvv %hhd\n", getValue(grid, pos));
     }
 }
 
@@ -43,7 +42,6 @@ position spawnApple(grid* grid)
         pos = RandPos(grid);
     }
     setValue(grid, pos, (unsigned char)APPLE);
-    printf("bite %hhd, %hhd ", pos.m_X, pos.m_Y);
     return pos;
 }
 
@@ -55,7 +53,6 @@ position spawnWall(grid* grid){
     }
     
     setValue(grid, pos, (unsigned char)WALL);
-    printf("bite %hhd, %hhd ", pos.m_X, pos.m_Y);
     return pos;
 }
 
