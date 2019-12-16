@@ -12,6 +12,7 @@ int main(int argc, char * argv[]){
 	int sensDeplacement = DROITE;
 	int score = 0;
 	int startGo = 0;
+	int indicateur2 = 0;
 	srand(time(NULL));
 
 	/*--------------------------PARTIE B---------------------------*/
@@ -64,7 +65,7 @@ int main(int argc, char * argv[]){
 	
 		if(infoTimer.compteurVitesse > i){
 
-			afficherSnake(&body,&pos,&color,&seg,&grid,&sensDeplacement,&score,&startGo);
+			afficherSnake(&body,&pos,&color,&seg,&grid,&sensDeplacement,&score,&startGo,&indicateur2);
 			affichageScore(&color, &rectNoirScore, &positionScore,score);
 			i = infoTimer.compteurVitesse;
 
@@ -72,6 +73,17 @@ int main(int argc, char * argv[]){
 		}
 
 		ChoisirCouleurDessin(color.rouge);
+	}
+
+	for (i = 0; i < Y_SIZE; i++)
+	{
+		for (j = 0; j < X_SIZE; j++)
+		{
+			pos.m_X = j;
+			pos.m_Y = i;
+			printf("%hhd|", getValue(&grid, pos));
+		}
+		puts("");
 	}
 
 	

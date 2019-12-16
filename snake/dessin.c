@@ -102,7 +102,7 @@ void initAffichageSnake(body* body,position* pos, color* color,segment* seg){
 
 }
 
-void afficherSnake(body* body,position* pos, color* color,segment* seg, grid*  grid,int *sensDeplacement, int* score, int* startGo){
+void afficherSnake(body* body,position* pos, color* color,segment* seg, grid*  grid,int *sensDeplacement, int* score, int* startGo, int* indicateur2){
 
 	int t;
 	int indicateur = 0;
@@ -137,12 +137,23 @@ void afficherSnake(body* body,position* pos, color* color,segment* seg, grid*  g
 		fonctionSensDeplacement(pos,*sensDeplacement);
 	}
 
-	if(getValue(grid,*pos) == APPLE){
+	if(getValue(grid,*pos) == APPLE || *indicateur2 == 1){
 
 		setValue(grid,*pos, GRASS);
 		*score += 5;
 		enqueue(body, *pos);
+		setValue(grid, *pos, (unsigned char)SNAKE);
 		affichagePomme(color,seg,grid);
+
+		*indicateur2 = *indicateur2 + 1;
+
+		if(*indicateur2 == 2){
+			*indicateur2 = 0;
+		}
+
+		printf("valeur indicateur2 =  %d\n",*indicateur2);
+
+
 		
 	}else if ( getValue(grid,*pos) == SNAKE && indicateur != 1){
 		exitFunction(startGo, seg, color);
@@ -267,7 +278,7 @@ void exitFunction(int *startGo, segment* seg, color* color){
 	int indicateur = 1;
 	int t;
 	char string1[50] = "GAME OVER";
-	char string2[50] = "presse q to exit";
+	char string2[50] = "press q to exit";
 
 	int tailleString1 = TailleChaineEcran(string1,2);
 	int tailleString2 = TailleChaineEcran(string2,2);

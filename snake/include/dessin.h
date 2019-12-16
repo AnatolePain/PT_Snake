@@ -78,7 +78,7 @@ void initfenetre(color* color, rect* rectVertClair, segment* seg,text* positionT
 
 void initAffichageSnake(body* body,position* pos, color* color,segment* seg);
 
-void afficherSnake(body* body,position* pos, color* color,segment* seg, grid*  grid,int *sensDeplacement, int* score,int* startGo);
+void afficherSnake(body* body,position* pos, color* color,segment* seg, grid*  grid,int *sensDeplacement, int* score,int* startGo,int* indicateur2);
 
 void initAffichagePomme(color* color, segment* seg,grid* grid);
 

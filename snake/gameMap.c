@@ -77,7 +77,7 @@ void move(grid* grid, body* body, position position)
 
 int isOutside(body* body)
 {
-	if(body->m_head->m_position.m_X < 0 || body->m_head->m_position.m_X >= X_SIZE || body->m_head->m_position.m_Y < 0 || body->m_head->m_position.m_Y >= Y_SIZE)
+	if(body->m_head->m_position.m_X < 0 || body->m_head->m_position.m_X >= X_SIZE - 1 || body->m_head->m_position.m_Y < 0 || body->m_head->m_position.m_Y >= Y_SIZE - 1)
 	{
 		return TRUE;
 	} else
