@@ -3,7 +3,7 @@
 #include<graph.h>
 #include "include/dessin.h"
 #include "include/gameMap.h"
-#define LARGEUR_FENETRE 500
+#define LARGEUR_FENETRE 1000
 
  
 int main(int argc, char * argv[]){
