@@ -3,7 +3,7 @@
 #include<graph.h>
 #include "include/dessin.h"
 #include "include/gameMap.h"
-#define LARGEUR_FENETRE 1000
+#define LARGEUR_FENETRE 500
 
  
 int main(int argc, char * argv[]){
@@ -67,7 +67,6 @@ int main(int argc, char * argv[]){
 			afficherSnake(&body,&pos,&color,&seg,&grid,&sensDeplacement,&score,&startGo);
 			affichageScore(&color, &rectNoirScore, &positionScore,score);
 			i = infoTimer.compteurVitesse;
-
 
 		}
 

@@ -58,7 +58,7 @@ void initScore(rect* rectNoirScore, segment* seg,text* positionScore){
 	/*---AFFICHAGE TIMER---*/
 	positionScore-> x = seg->largeur - 8*seg->a;
 	positionScore-> y = seg->hauteur - 2*seg->a;
-	sprintf(positionScore->string, "07d",0);
+	sprintf(positionScore->string, "0000000");
 
 }
 
