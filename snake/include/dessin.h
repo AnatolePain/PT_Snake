@@ -62,7 +62,6 @@ typedef struct infoTimer{
 
  int compteurSec;
  int compteurVitesse;
- unsigned long microsecondes;
  unsigned long compteurMicrosec;
  unsigned long compteurMicrosecVitesse;
  unsigned long acceleration;
