@@ -41,7 +41,7 @@ void initTimer(rect* rectNoirTimer, segment* seg,text* positionTimer, infoTimer*
 
 	/*---INFO COMPLEMENTAIRE---*/
 	infoTimer->compteurMicrosec = microsecondes + CYCLE;
-	infoTimer->compteurMicrosecVitesse = microsecondes + VITESSE_SNAKE_DEMARAGE;
+	infoTimer->compteurMicrosecVitesse = 0;
 	infoTimer->compteurSec = 0;
 	infoTimer->acceleration = ACCELERATION_SNAKE;
 
