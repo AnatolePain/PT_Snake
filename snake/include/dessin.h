@@ -12,6 +12,7 @@
 #define NOMBRE_DE_CAILLOU 8
 #define ALLONGEMENT_SNAKE 2
 #define SCORE_PAR_POMME 5
+#define DECALLAGE_TIMER 2.5F
 
 #define HAUT 8
 #define BAS 2

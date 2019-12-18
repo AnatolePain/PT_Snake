@@ -40,12 +40,12 @@ void initTimer(rect* rectNoirTimer, segment* seg,text* positionTimer, infoTimer*
 	sprintf(positionTimer->string, "%02d:%02d",0,0);
 
 	/*---INFO COMPLEMENTAIRE---*/
-	infoTimer->compteurMicrosec = microsecondes + CYCLE;
+	infoTimer->compteurMicrosec = microsecondes + (unsigned long)(DECALLAGE_TIMER*CYCLE); /*rajout d'un décallage sur le cycle pour qu'il démarre en même temps que le snake*/
 	infoTimer->compteurSec = 0;
 
-	infoTimer->compteurMicrosecVitesse = microsecondes;
+	infoTimer->compteurMicrosecVitesse = 0;
 	infoTimer->acceleration = ACCELERATION_SNAKE;
-	infoTimer->compteurVitesse = 1;
+	infoTimer->compteurVitesse = 0;
 
 }
 
@@ -242,7 +242,7 @@ void timer(unsigned long microsecondes, infoTimer* infoTimer,text* positionTimer
 
 	if (microsecondes > infoTimer->compteurMicrosecVitesse){
 		infoTimer->compteurMicrosecVitesse = microsecondes + (VITESSE_SNAKE_DEMARAGE - infoTimer->acceleration);
-		infoTimer->compteurVitesse++;
+		infoTimer->compteurVitesse = infoTimer->compteurVitesse + 1;
 		infoTimer->acceleration += ACCELERATION_SNAKE;
 	}
 
