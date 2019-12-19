@@ -20,9 +20,9 @@ position spawnWall(grid* grid); /* met un "mur"(un caillou) à un endroit libre 
 
 position RandPos(grid* grid); /* génère une position aléatoire */
 
-void move(grid* grid, body* body, position position);
+void move(grid* grid, body* body, position position); /* déplace le serpent d'une case en utilisant la fonction "enqueue()" du fichier snake.c */
 
-int isOutside(body* body);
+int isOutside(body* body); /* renvoie faux si la ête du serpent est en dehors de la zone de jeu */
 
 #endif
 

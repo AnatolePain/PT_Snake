@@ -14,7 +14,7 @@ CFLAGS = -lgraph -ansi
 
 snake.o : ./include/snake.h
 
-grid.o : ./include/grid.h ./include/snake.h
+grid.o : ./include/grid.h 
 
 gameMap.o : ./include/gameMap.h ./include/grid.h ./include/snake.h
 
