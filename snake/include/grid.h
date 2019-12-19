@@ -1,6 +1,6 @@
 #ifndef GRID_H
 #define GRID_H
-
+#include "snake.h"
 #define X_SIZE 60
 #define Y_SIZE 40
 #define ARGUMENT_ERROR 255;
