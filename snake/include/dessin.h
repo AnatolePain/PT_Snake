@@ -6,7 +6,7 @@
 #include<graph.h>
 #include "gameMap.h"
 #define CYCLE 1000000UL
-#define VITESSE_SNAKE_DEMARAGE 75000UL 
+#define VITESSE_SNAKE_DEMARAGE 66666UL 
 #define ACCELERATION_SNAKE 15UL
 #define NOMBRE_DE_POMME 5
 #define NOMBRE_DE_CAILLOU 8
